@@ -270,21 +270,24 @@ if [ ! -f $PREFIX/lib/libavcodec.a ]; then
     --prefix=$PREFIX \
     --enable-static \
     --disable-shared \
-    --disable-programs \
-    --disable-doc \
-    --disable-avdevice \
-    --disable-swscale \
-    --disable-postproc \
-    --disable-vaapi \
-    --disable-vdpau \
-    --disable-vulkan \
-    --disable-hwaccels \
-    --disable-x86asm \
-    --disable-libopus \
-    --disable-libvorbis \
+    --disable-all \
     --enable-gpl \
+    --enable-nonfree \
+    --enable-openssl \
+    --enable-zlib \
+    --enable-avcodec \
+    --enable-avformat \
+    --enable-avutil \
+    --enable-avfilter \
+    --enable-swresample \
+    --enable-decoder=aac,aac_fixed,alac,mjpeg,png,dca,dsd_lsbf,dsd_msbf,dsd_lsbf_planar,dsd_msbf_planar \
+    --enable-demuxer=mov,aac,m4v,dts,dsf,dsdiff,dash,hls \
+    --enable-parser=aac,alac,mjpeg,mpegaudio,dca \
+    --enable-protocol=file,http,https,tcp,tls,pipe \
+    --enable-filter=aresample \
+    --enable-network \
     --extra-cflags="$CFLAGS -I$PREFIX/include" \
-    --extra-ldflags="-L$PREFIX/lib"
+    --extra-ldflags="-L$PREFIX/lib -ldl -lpthread"
   make -j$(nproc) && make install
   cd /build/src
 else echo "✓ FFmpeg"; fi
@@ -302,6 +305,7 @@ meson setup build-hifiberry \
   --native-file /build/native.ini \
   --prefix=/usr \
   --buildtype=release \
+  -Ddefault_library=shared \
   -Ddocumentation=disabled \
   -Dtest=false \
   -Ddaemon=false \
@@ -311,16 +315,18 @@ meson setup build-hifiberry \
   -Dzeroconf=disabled \
   -Dneighbor=false \
   -Dcue=true \
+  -Dflac=enabled \
   -Dwavpack=enabled \
+  -Dvorbis=enabled \
+  -Dopus=enabled \
+  -Dfaad=enabled \
   -Dcurl=enabled \
   -Dhttpd=true \
   -Dffmpeg=enabled \
-  -Dqobuz=disabled \
   -Dmad=enabled \
-  -Dmpcdec=disabled \
   -Dlame=enabled \
   -Dalsa=enabled \
-  -Ddefault_library=static
+  -Diconv=enabled
 
 ninja -C build-hifiberry
 arm-linux-gnueabihf-strip build-hifiberry/mpd
