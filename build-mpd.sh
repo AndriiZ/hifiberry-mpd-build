@@ -292,6 +292,27 @@ if [ ! -f $PREFIX/lib/libavcodec.a ]; then
   cd /build/src
 else echo "✓ FFmpeg"; fi
 
+#Sox
+if [ ! -f $PREFIX/lib/libsoxr.a ]; then
+   git clone https://git.code.sf.net/p/soxr/code soxr-code
+   cd soxr-code
+
+   mkdir -p build && cd build
+
+   cmake .. \
+     -DCMAKE_SYSTEM_NAME=Linux \
+     -DCMAKE_SYSTEM_PROCESSOR=arm \
+     -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc \
+     -DCMAKE_INSTALL_PREFIX=$PREFIX \
+     -DBUILD_SHARED_LIBS=OFF \
+     -DBUILD_EXAMPLES=OFF \
+     -DBUILD_TESTS=OFF \
+     -DWITH_OPENMP=OFF
+
+   make -j$(nproc)
+   make install
+else echo "✓ Sox"; fi
+
 # MPD
 if [ ! -d mpd-0.24.8 ]; then
   wget -nc https://www.musicpd.org/download/mpd/0.24/mpd-0.24.8.tar.xz
@@ -326,6 +347,7 @@ meson setup build-hifiberry \
   -Dmad=enabled \
   -Dlame=enabled \
   -Dalsa=enabled \
+  -Dsoxr=enabled \
   -Diconv=enabled
 
 ninja -C build-hifiberry
