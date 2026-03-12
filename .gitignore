@@ -1,0 +1,8 @@
+*.img
+*.tar.*
+*.tgz
+*.log
+mpd
+mpd-build/
+mpd-sysroot/
+hifiberry-sysroot/

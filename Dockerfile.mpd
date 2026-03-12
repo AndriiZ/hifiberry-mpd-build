@@ -1,0 +1,24 @@
+FROM debian:bookworm
+
+RUN apt update && apt install -y \
+  gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
+  libc6-dev-armhf-cross \
+  make cmake ninja-build pkg-config wget git \
+  python3 python3-pip meson nasm xz-utils bison flex \
+  autoconf automake libtool \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install meson --upgrade --break-system-packages
+
+RUN printf '#!/bin/sh\nexport PKG_CONFIG_PATH=/opt/sysroot/lib/pkgconfig\nexport PKG_CONFIG_LIBDIR=/opt/sysroot/lib/pkgconfig\nexec pkg-config "$@"\n' \
+  > /usr/local/bin/arm-linux-gnueabihf-pkg-config \
+  && chmod +x /usr/local/bin/arm-linux-gnueabihf-pkg-config
+
+ENV PATH=/usr/local/bin:$PATH
+ENV PREFIX=/opt/sysroot
+ENV PKG_CONFIG_PATH=/opt/sysroot/lib/pkgconfig
+ENV PKG_CONFIG_LIBDIR=/opt/sysroot/lib/pkgconfig
+ENV CFLAGS="-march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=hard -I/opt/sysroot/include"
+ENV CXXFLAGS="-march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=hard -I/opt/sysroot/include"
+
+WORKDIR /build
