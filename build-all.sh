@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 IMG="$SCRIPT_DIR/hifiberryos-20230404-pi2.img"
 SYSROOT="$SCRIPT_DIR/hifiberry-sysroot"
 
