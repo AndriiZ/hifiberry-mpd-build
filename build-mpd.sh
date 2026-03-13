@@ -325,11 +325,11 @@ if [ ! -f $PREFIX/lib/libupnp.a ]; then
 else echo "✓ pUPnP"; fi
 
 # MPD
-if [ ! -d mpd-0.24.8 ]; then
-  wget -nc https://www.musicpd.org/download/mpd/0.24/mpd-0.24.8.tar.xz
-  tar xJf mpd-0.24.8.tar.xz
+if [ ! -d mpd-0.24.9 ]; then
+  wget -nc https://www.musicpd.org/download/mpd/0.24/mpd-0.24.9.tar.xz
+  tar xJf mpd-0.24.9.tar.xz
 fi
-cd mpd-0.24.8
+cd mpd-0.24.9
 rm -rf build-hifiberry
 
 meson setup build-hifiberry \
