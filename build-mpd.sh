@@ -248,10 +248,10 @@ else echo "✓ libmad"; fi
 
 # alsa-lib
 if [ ! -f $PREFIX/lib/libasound.a ]; then
-  wget -nc https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.12.tar.bz2
-  tar xjf alsa-lib-1.2.12.tar.bz2 && cd alsa-lib-1.2.12
+  wget -nc https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.15.tar.bz2
+  tar xjf alsa-lib-1.2.15.tar.bz2 && cd alsa-lib-1.2.15
   ./configure --host=arm-linux-gnueabihf --prefix=$PREFIX \
-    --disable-shared --enable-static --disable-python \
+    --disable-shared --enable-static --disable-python --with-configdir=/usr/share/alsa \
     CC=arm-linux-gnueabihf-gcc CFLAGS="$CFLAGS"
   make -j$(nproc) && make install
   cd /build/src
