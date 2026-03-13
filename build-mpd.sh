@@ -324,6 +324,25 @@ if [ ! -f $PREFIX/lib/libupnp.a ]; then
    make install  
 else echo "✓ pUPnP"; fi
 
+#id3tag
+if [ ! -f $PREFIX/lib/libid3tag.a ]; then
+  git clone https://github.com/tenacityteam/libid3tag.git
+  cd libid3tag
+  cmake -DCMAKE_SYSTEM_NAME=Linux \
+    -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc \
+    -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ \
+    -DCMAKE_INSTALL_PREFIX=$PREFIX \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DCMAKE_C_FLAGS="$CFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CFLAGS" \
+    -DCMAKE_FIND_ROOT_PATH=/opt/sysroot .
+    
+   make -j$(nproc)
+   make install  
+else echo "✓ id3tag"; fi
+
+
+
 # MPD
 if [ ! -d mpd-0.24.9 ]; then
   wget -nc https://www.musicpd.org/download/mpd/0.24/mpd-0.24.9.tar.xz
@@ -359,7 +378,8 @@ meson setup build-hifiberry \
   -Dlame=enabled \
   -Dalsa=enabled \
   -Dsoxr=enabled \
-  -Diconv=enabled
+  -Diconv=enabled \
+  -Did3tag=enabled
 
 ninja -C build-hifiberry
 arm-linux-gnueabihf-strip build-hifiberry/mpd
