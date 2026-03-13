@@ -44,8 +44,8 @@ cd /build/src
 
 # OpenSSL
 if [ ! -f $PREFIX/lib/libssl.a ]; then
-  wget -nc https://www.openssl.org/source/openssl-3.3.0.tar.gz
-  tar xzf openssl-3.3.0.tar.gz && cd openssl-3.3.0
+  wget -nc https://www.openssl.org/source/openssl-3.4.0.tar.gz
+  tar xzf openssl-3.4.0.tar.gz && cd openssl-3.4.0
   ./Configure linux-armv4 --cross-compile-prefix=arm-linux-gnueabihf- \
     --prefix=$PREFIX --openssldir=$PREFIX no-shared no-tests CFLAGS="$CFLAGS"
   make -j$(nproc) && make install_sw
