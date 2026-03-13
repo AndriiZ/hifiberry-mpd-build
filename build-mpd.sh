@@ -313,6 +313,17 @@ if [ ! -f $PREFIX/lib/libsoxr.a ]; then
    make install
 else echo "✓ Sox"; fi
 
+#pUPnP
+if [ ! -f $PREFIX/lib/libupnp.a ]; then
+  git clone https://github.com/pupnp/pupnp.git
+  cd pupnp
+  git checkout branch-1.12.x
+  sh ./bootstrap
+  ./configure   --host=arm-linux-gnueabihf   --prefix=$PREFIX   --enable-static   --disable-shared   --disable-ipv6   --disable-samples
+   make -j$(nproc)
+   make install  
+else echo "✓ pUPnP"; fi
+
 # MPD
 if [ ! -d mpd-0.24.8 ]; then
   wget -nc https://www.musicpd.org/download/mpd/0.24/mpd-0.24.8.tar.xz
@@ -332,7 +343,7 @@ meson setup build-hifiberry \
   -Ddaemon=false \
   -Dsystemd=disabled \
   -Ddbus=disabled \
-  -Dupnp=disabled \
+  -Dupnp=pupnp \
   -Dzeroconf=disabled \
   -Dneighbor=false \
   -Dcue=true \
