@@ -5,7 +5,7 @@ RUN apt update && apt install -y \
   libc6-dev-armhf-cross \
   make cmake ninja-build pkg-config wget git \
   python3 python3-pip meson nasm xz-utils bison flex \
-  autoconf automake libtool \
+  autoconf automake libtool build-essential shtool \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install meson --upgrade --break-system-packages
