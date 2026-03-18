@@ -32,3 +32,6 @@ if [ ! -f $PREFIX/bin/msmtp ]; then
   make -j$(nproc) && make install
   cd /build/src
 else echo "✓ msmtp"; fi
+
+arm-linux-gnueabihf-strip /opt/sysroot/bin/msmtp
+cp  /opt/sysroot/bin/msmtp /host
