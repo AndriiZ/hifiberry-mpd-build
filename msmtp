@@ -1,0 +1,34 @@
+if [ ! -f $PREFIX/lib/libunistring.a ]; then
+  wget -nc https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.gz
+  tar xzf libunistring-1.1.tar.gz && cd libunistring-1.1
+  ./configure --host=arm-linux-gnueabihf --prefix=$PREFIX \
+    --enable-static --disable-shared \
+    CC=arm-linux-gnueabihf-gcc CFLAGS="$CFLAGS"
+  make -j$(nproc) && make install
+  cd /build/src
+else echo "✓ libunistring"; fi
+
+if [ ! -f $PREFIX/lib/libidn2.a ]; then
+  wget -nc https://ftp.gnu.org/gnu/libidn2/libidn2-2.3.4.tar.gz
+  tar xzf libidn2-2.3.4.tar.gz && cd libidn2-2.3.4
+  ./configure --host=arm-linux-gnueabihf --prefix=$PREFIX \
+    --enable-static --disable-shared --with-libunistring-prefix=$PREFIX \
+    CC=arm-linux-gnueabihf-gcc CFLAGS="$CFLAGS" LDFLAGS="-L$PREFIX/lib"
+  make -j$(nproc) && make install
+  cd /build/src
+else echo "✓ libidn2"; fi
+
+if [ ! -f $PREFIX/bin/msmtp ]; then
+  tar xf msmtp-1.8.32.tar.xz && cd msmtp-1.8.32
+  ./configure --host=arm-linux-gnueabihf --build=x86_64-linux-gnu \
+    --prefix=$PREFIX --with-tls=openssl \
+    CC=arm-linux-gnueabihf-gcc \
+    CFLAGS="$CFLAGS" \
+    LDFLAGS="-static -L$PREFIX/lib" \
+    OPENSSL_CFLAGS="-I$PREFIX/include" \
+    OPENSSL_LIBS="-L$PREFIX/lib -lssl -lcrypto -lpthread -ldl -latomic" \
+    IDN2_CFLAGS="-I$PREFIX/include" \
+    IDN2_LIBS="-L$PREFIX/lib -lidn2 -lunistring"
+  make -j$(nproc) && make install
+  cd /build/src
+else echo "✓ msmtp"; fi
